@@ -3,15 +3,15 @@ package sorting.test;
 import java.util.Arrays;
 
 
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import sorting.divideAndConquer.MergeSort;
 import sorting.divideAndConquer.QuickSort;
 import sorting.AbstractSorting;
 
-public class StudentSortingTest {
+public class StudentQuickSortingTest {
 
 	private Integer[] vetorTamPar;
 	private Integer[] vetorTamImpar;
@@ -45,7 +45,6 @@ public class StudentSortingTest {
 	private void getImplementation() {
 		// TODO O aluno deve instanciar sua implementação abaixo ao invés de
 		// null
-		//		this.implementation = new MergeSort<Integer>();
 		this.implementation = new QuickSort<Integer>();
 	}
 
