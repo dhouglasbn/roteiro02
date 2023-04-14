@@ -1,6 +1,9 @@
 package sorting.divideAndConquer.hybridMergesort;
 
 import sorting.AbstractSorting;
+import util.*;
+
+import sorting.divideAndConquer.MergeSort;
 
 /**
  * A classe HybridMergeSort representa a implementação de uma variação do
@@ -28,9 +31,77 @@ public class HybridMergeSort<T extends Comparable<T>> extends
 
 	protected static int MERGESORT_APPLICATIONS = 0;
 	protected static int INSERTIONSORT_APPLICATIONS = 0;
+	
+	private MergeSort<T> mergeSort;
+	
+	public HybridMergeSort() {
+		this.mergeSort = new MergeSort<T>();
+	}
+	@Override
+	public void sort(T[] array) {
+		this.resetCounting();
+		
+		int leftIndex = 0;
+		int rightIndex = array.length - 1;
+		
+		if (array.length <= SIZE_LIMIT) {
+			this.insertionSort(array, leftIndex, rightIndex);
+			INSERTIONSORT_APPLICATIONS += 1;
+			return;
+		}
+        
+        else {
+            
+            int middle = (leftIndex + rightIndex) / 2;
+            sort(array, leftIndex, middle);
+            sort(array, middle + 1, rightIndex);
+    
+            this.mergeSort.merge(array, leftIndex, middle, rightIndex);
+            MERGESORT_APPLICATIONS += 1;
+        }
+	}
 
+	@Override
 	public void sort(T[] array, int leftIndex, int rightIndex) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
+		if ((rightIndex + 1) - leftIndex <= SIZE_LIMIT) {
+			this.insertionSort(array, leftIndex, rightIndex);
+			INSERTIONSORT_APPLICATIONS += 1;
+			return;
+		}
+        
+        else {
+            
+            int middle = (leftIndex + rightIndex) / 2;
+            sort(array, leftIndex, middle);
+            sort(array, middle + 1, rightIndex);
+    
+            this.mergeSort.merge(array, leftIndex, middle, rightIndex);
+            MERGESORT_APPLICATIONS += 1;
+        }
+	}
+	
+	public void insertionSort(T[] array, int leftIndex, int rightIndex) {
+		for (int i = leftIndex + 1; i < rightIndex + 1; i++) { 
+			
+			int j = i;
+		
+			while (j > leftIndex && array[j].compareTo(array[j-1]) <= 0) {
+				Util.swap(array, j, j - 1);
+				j -= 1;
+			}
+		}	
+	}
+	
+	public int getMergeSortCounting() {
+		return MERGESORT_APPLICATIONS;
+	}
+	
+	public int getInsertionSortCounting() {
+		return INSERTIONSORT_APPLICATIONS;
+	}
+	
+	private void resetCounting() {
+		MERGESORT_APPLICATIONS = 0;
+		INSERTIONSORT_APPLICATIONS = 0;
 	}
 }
