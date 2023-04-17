@@ -1,6 +1,7 @@
 package sorting.divideAndConquer.quicksort3;
 
 import sorting.AbstractSorting;
+import util.Util;
 
 /**
  * A classe QuickSortMedianOfThree representa uma variação do QuickSort que
@@ -16,11 +17,43 @@ import sorting.AbstractSorting;
  * 5. Aplicar o particionamento considerando o vetor menor, de A[left+1] até A[right-1].
  * 6. Aplicar o algoritmo na particao a esquerda e na particao a direita do pivô.
  */
-public class QuickSortMedianOfThree<T extends Comparable<T>> extends
-		AbstractSorting<T> {
+public class QuickSortMedianOfThree<T extends Comparable<T>> extends AbstractSorting<T> {
 
-	public void sort(T[] array, int leftIndex, int rightIndex) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Not implemented yet!");
-	}
+    @Override
+    public void sort(T[] array, int leftIndex, int rightIndex) {
+    	if (leftIndex < rightIndex) {
+            int pivot = partition(array, leftIndex, rightIndex);
+            sort(array, leftIndex, pivot - 1);
+            sort(array, pivot + 1, rightIndex);
+        }
+    }
+
+    private int partition(T[] array, int leftIndex, int rightIndex) {
+    	int midIndex = (rightIndex - leftIndex) / 2;
+        int median = medianOfThree(array, leftIndex, midIndex, rightIndex);
+        Util.swap(array, median, rightIndex);  // move pivot to the end
+        T pivot = array[rightIndex];
+        int i = leftIndex - 1;
+        for (int j = leftIndex; j < rightIndex; j++) {
+            if (array[j].compareTo(pivot) == -1) {
+                i++;
+                Util.swap(array, i, j);
+            }
+        }
+        Util.swap(array, i + 1, rightIndex);  // move pivot to its final position
+        return i + 1;
+    }
+    
+    public int medianOfThree(T[] array, int a, int b, int c) {
+        T x = array[a], y = array[b], z = array[c];
+        if (x.compareTo(y) == -1) {
+            if (y.compareTo(z) == -1) return b;  // x < y < z
+            else if (x.compareTo(z) == -1) return c;  // x < z <= y
+            else return a;  // z <= x < y
+        } else {
+            if (x.compareTo(z) == -1) return a;  // y <= x < z
+            else if (y.compareTo(z) == -1) return c;  // y < z <= x
+            else return b;  // z <= y < x
+        }
+    }
 }
